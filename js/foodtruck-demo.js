@@ -84,7 +84,7 @@ function initMap() {
 }
 // Deletes all markers in the array by removing references to them.
 function deleteMarkers() {
-    for (var i = 0; i < markers.length; i++) {
+    for (var i = 0; i < gmarkers.length; i++) {
         gmarkers[i].setMap(null);
     }
     gmarkers = [];
