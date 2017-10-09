@@ -4,7 +4,7 @@
  */
 var limit = 10; // the maximum number of food trucks to search.
 var foodTrucksUrl = "https://data.sfgov.org/resource/6a9r-agq8.json";
-
+var gmarkers = []; // global variable for foodtruck markers
 // Map initialization (callback)
 function initMap() {
     // options for Google map display (Center[Lat, Long]: San Francisco, CA)
@@ -23,9 +23,13 @@ function initMap() {
     });
     // Click event to the map to emulate current position
     google.maps.event.addListener(map, "click", function (e) {
+        // delete all markers
+        deleteMarkers();
+        // set position
         pointer.setPosition(e.latLng);
         var pos = e.latLng, o = "(" + pos.lat().toFixed(6) + ", " + pos.lng().toFixed(6) + ")";
         infowindow.setContent(o);
+        infowindow.open(map, pointer);
 
         // Fetch closest food trucks
         $.ajax({
@@ -55,6 +59,9 @@ function initMap() {
                       title: truck.applicant,
                       optimized: false
                     });
+                    // add marker to global array
+                    gmarkers.push(marker);
+                    // get the distance
                     var range = calcDistance(pos.lat(), pos.lng(), truck.location.coordinates[1], truck.location.coordinates[0]);
                     // Add an InfoWindow with details about the truck
                     var markerInfo = new google.maps.InfoWindow({
@@ -74,6 +81,13 @@ function initMap() {
             }
         });
     });
+}
+// Deletes all markers in the array by removing references to them.
+function deleteMarkers() {
+    for (var i = 0; i < markers.length; i++) {
+        gmarkers[i].setMap(null);
+    }
+    gmarkers = [];
 }
 //This function takes in latitude and longitude of two location and returns the distance between them (in meters)
 function calcDistance(lat1, lon1, lat2, lon2) {
