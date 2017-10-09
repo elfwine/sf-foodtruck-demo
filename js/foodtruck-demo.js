@@ -40,7 +40,7 @@ function initMap() {
                 "$where": "expirationdate > '" + (new Date()).toISOString().replace(/Z/, '') + "'"
                   + " AND within_circle(location, "
                   + pos.lat().toFixed(6) + ", "
-                  + pos.lng().toFixed(6) + ", 500)",
+                  + pos.lng().toFixed(6) + ", 1000)",
                 "$select": "*", // , distance_in_meters(location, 'POINT(" + pos.lat().toFixed(6) + " " + pos.lng().toFixed(6) + ")')
                 //"$order" : "range",
                 "$limit" : limit,
