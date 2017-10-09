@@ -35,10 +35,10 @@ function initMap() {
                 "status" : "APPROVED",
                 "$where": "expirationdate > '" + (new Date()).toISOString().replace(/Z/, '') + "'"
                   + " AND within_circle(location, "
-                  + pos.lat() + ", "
-                  + pos.lat() + ", 500)",
-                "$select": "*, distance_in_meters(location, 'POINT(" + pos.lat() + " " + pos.lng() + ")') AS range",
-                "$order" : "range",
+                  + pos.lat().toFixed(6) + ", "
+                  + pos.lng().toFixed(6) + ", 500)",
+                "$select": "*", // , distance_in_meters(location, 'POINT(" + pos.lat().toFixed(6) + " " + pos.lng().toFixed(6) + ")')
+                //"$order" : "range",
                 "$limit" : limit,
                 "$$app_token": "YATDx7e2s5IEl8TBGenHRVYgJ"
             }
@@ -55,11 +55,12 @@ function initMap() {
                       title: truck.applicant,
                       optimized: false
                     });
+                    var range = calcDistance(pos.lat(), pos.lng(), truck.location.coordinates[1], truck.location.coordinates[0]);
                     // Add an InfoWindow with details about the truck
                     var markerInfo = new google.maps.InfoWindow({
                       content: '<div class="info-window">'
                         + '<h4>' + truck.applicant + '</h4>'
-                        + '<h5>' + Math.round(parseFloat(truck.range)) + ' meters away.</h5>'
+                        + '<h5>' + Math.round(parseFloat(range)) + ' meters away.</h5>'
                         + '<p>' + truck.fooditems + '</p>'
                         + '</div>'
                     });
@@ -73,4 +74,22 @@ function initMap() {
             }
         });
     });
+}
+//This function takes in latitude and longitude of two location and returns the distance between them (in meters)
+function calcDistance(lat1, lon1, lat2, lon2) {
+  var R = 6371; // Radius of the earth in km
+  var dLat = toRad(lat2-lat1);
+  var dLon = toRad(lon2-lon1);
+  var lat1 = toRad(lat1);
+  var lat2 = toRad(lat2);
+
+  var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  var d = R * c;
+  return d * 1000;
+}
+// Converts numeric degrees to radians
+function toRad(Value) {
+    return Value * Math.PI / 180;
 }
