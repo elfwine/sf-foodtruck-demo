@@ -5,16 +5,14 @@
 var limit = 10; // the maximum number of food trucks to search.
 var foodTrucksUrl = "https://data.sfgov.org/resource/6a9r-agq8.json";
 
-$(function() {
-  // disable the query input field until the use click on the map.
-  $('.query').prop('disabled', true);
-
-  // options for Google map display (Center[Lat, Long]: San Francisco, CA)
-  var options = {
-    center: new google.maps.LatLng(37.77493, -122.41942),
-    zoom: 12,
-    mapTypeId: google.maps.MapTypeId.TERRAIN
-  }
+// Map initialization (callback)
+function initMap() {
+    // options for Google map display (Center[Lat, Long]: San Francisco, CA)
+    var options = {
+        center: new google.maps.LatLng(37.77493, -122.41942),
+        zoom: 12,
+        mapTypeId: google.maps.MapTypeId.TERRAIN
+    }
     // google map initialization
     var map = new google.maps.Map($("#map")[0], options);
     var pointer = new google.maps.Marker({position: options.center, map: map});
@@ -73,6 +71,6 @@ $(function() {
                 // No Food trucks nearby
                 alert("No Food trucks found nearby the pointer.");
             }
-        }
+        });
     });
-});
+}
