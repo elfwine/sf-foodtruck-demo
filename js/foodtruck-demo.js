@@ -66,7 +66,7 @@ function initMap() {
                     google.maps.event.addListener(marker, 'click', function() {
                       markerInfo.open(map, marker);
                     });
-                }
+                });
             } else {
                 // No Food trucks nearby
                 alert("No Food trucks found nearby the pointer.");
