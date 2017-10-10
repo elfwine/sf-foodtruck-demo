@@ -41,8 +41,8 @@ function initMap() {
                   + " AND within_circle(location, "
                   + pos.lat().toFixed(6) + ", "
                   + pos.lng().toFixed(6) + ", 1000)",
-                "$select": "*", // , distance_in_meters(location, 'POINT(" + pos.lat().toFixed(6) + " " + pos.lng().toFixed(6) + ")')
-                //"$order" : "range",
+                "$select": "* , distance_in_meters(location, 'POINT(" + pos.lng().toFixed(6) + " " + pos.lat().toFixed(6) + ")') AS range",
+                "$order" : "range",
                 "$limit" : limit,
                 "$$app_token": "YATDx7e2s5IEl8TBGenHRVYgJ"
             }
@@ -62,12 +62,12 @@ function initMap() {
                     // add marker to global array
                     gmarkers.push(marker);
                     // get the distance
-                    var range = calcDistance(pos.lat(), pos.lng(), truck.location.coordinates[1], truck.location.coordinates[0]);
+                    //var range = calcDistance(pos.lat(), pos.lng(), truck.location.coordinates[1], truck.location.coordinates[0]);
                     // Add an InfoWindow with details about the truck
                     var markerInfo = new google.maps.InfoWindow({
                       content: '<div class="info-window">'
                         + '<h4>' + truck.applicant + '</h4>'
-                        + '<h5>' + Math.round(parseFloat(range)) + ' meters away.</h5>'
+                        + '<h5>' + Math.round(parseFloat(truck.range)) + ' meters away.</h5>'
                         + '<p>' + truck.fooditems + '</p>'
                         + '</div>'
                     });
