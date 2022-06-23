@@ -5,6 +5,7 @@
 var limit = 10; // the maximum number of food trucks to search.
 var foodTrucksUrl = "https://data.sfgov.org/resource/6a9r-agq8.json";
 var gmarkers = []; // global variable for foodtruck markers
+var currentInfoWindow = null;
 // Map initialization (callback)
 function initMap() {
     // options for Google map display (Center[Lat, Long]: San Francisco, CA)
@@ -72,7 +73,11 @@ function initMap() {
                         + '</div>'
                     });
                     google.maps.event.addListener(marker, 'click', function() {
-                      markerInfo.open(map, marker);
+                        if(currentInfoWindow) {
+                            currentInfoWindow.close();
+                        }
+                        markerInfo.open(map, marker);
+                        currentInfoWindow = markerInfo;
                     });
                 });
             } else {
